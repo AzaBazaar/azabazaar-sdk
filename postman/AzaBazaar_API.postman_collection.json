@@ -1,0 +1,66 @@
+{
+  "info": {
+    "name": "AzaBazaar Enterprise X API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "https://sandbox.azabazaar.com" },
+    { "key": "api_key", "value": "azb_test_YOUR_SANDBOX_KEY" }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{api_key}}", "type": "string" }]
+  },
+  "item": [
+    {
+      "name": "1. Get Wallet Balance",
+      "request": { "method": "GET", "url": "{{base_url}}/api/wallet/balance" }
+    },
+    {
+      "name": "2. Get Telecom Networks",
+      "request": { "method": "GET", "url": "{{base_url}}/api/vtu/networks" }
+    },
+    {
+      "name": "3. Get MTN Data Plans",
+      "request": { "method": "GET", "url": "{{base_url}}/api/vtu/plans?network_id=1&category=data" }
+    },
+    {
+      "name": "4. Purchase Airtime",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "X-Idempotency-Key", "value": "pm-air-{{$timestamp}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"service_category\": \"airtime\",\n  \"phone\": \"08069309367\",\n  \"amount\": 100,\n  \"network_id\": 1\n}"
+        },
+        "url": "{{base_url}}/api/vtu/purchase"
+      }
+    },
+    {
+      "name": "5. Purchase Data Bundle",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "X-Idempotency-Key", "value": "pm-data-{{$timestamp}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"service_category\": \"data\",\n  \"phone\": \"08069309367\",\n  \"service_id\": \"MT-0112\",\n  \"network_id\": 1\n}"
+        },
+        "url": "{{base_url}}/api/vtu/purchase"
+      }
+    },
+    {
+      "name": "6. Check Order Status",
+      "request": { "method": "GET", "url": "{{base_url}}/api/vtu/status?reference=SBX-VTU-XXXXXX" }
+    },
+    {
+      "name": "7. Get NIP Banks List",
+      "request": { "method": "GET", "url": "{{base_url}}/api/banks" }
+    }
+  ]
+}
